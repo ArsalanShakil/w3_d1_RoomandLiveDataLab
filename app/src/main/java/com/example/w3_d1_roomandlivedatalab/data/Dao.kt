@@ -8,9 +8,9 @@ interface UserDao {
 @Query("SELECT * FROM user")
 fun getAll(): LiveData<List<User>>
 
-@Query("SELECT * FROM user WHERE user.uid = :userid")
-// the @Relation do the INNER JOIN for you ;)
-fun getUserWithContacts(userid: Long): UserContact
+ @Query("SELECT * FROM user WHERE user.uid = :userid")
+  // the @Relation do the INNER JOIN for you ;)
+  fun getUserWithContacts(userid: Long): UserContact
 
  @Insert(onConflict = OnConflictStrategy.REPLACE)
  fun insert(user: User): Long
@@ -23,4 +23,19 @@ fun getUserWithContacts(userid: Long): UserContact
  }
 
  @Dao
- interface ContactInfoDao { /* ... */ }
+ interface ContactInfoDao {
+  @Query("SELECT * FROM contactinfo WHERE user = :id")
+  fun getAll(id:Long): LiveData<List<ContactInfo>>
+
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  fun insert(contactinfo: ContactInfo): Long
+
+  @Update
+  fun update(contactinfo: ContactInfo)
+
+  @Delete
+  fun delete(contactinfo: ContactInfo)
+
+
+
+}
