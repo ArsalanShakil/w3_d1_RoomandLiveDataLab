@@ -25,7 +25,7 @@ class MainFragment : Fragment() {
     }
 
     lateinit var recyclerView: RecyclerView
-    lateinit var adapter: RecipeAdapter
+    lateinit var adapter: MovieAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,13 +34,12 @@ class MainFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
         recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
-        adapter = RecipeAdapter()
+        adapter = MovieAdapter()
         adapter.onClick = { showDetail(it) }
 
         recyclerView.adapter = adapter
         refreshAsync()
 
-        // Add new empty recipe
         view.findViewById<FloatingActionButton>(R.id.floatingActionButton).setOnClickListener {
             add()
         }
@@ -54,38 +53,38 @@ class MainFragment : Fragment() {
 
     }
 
-    private fun showDetail(recipe : String)
+    private fun showDetail(movie : String)
     {
-        Log.e("DBG","Showing ${recipe}")
+        Log.e("DBG","Showing ${movie}")
         GlobalScope.launch {
-            val db = RecipeDB.get(requireContext().applicationContext)
-            val recipe = db.RecipeDao().getRecipe(recipe)
+            val db = MovieDB.get(requireContext().applicationContext)
+            val movie = db.moviecastDao().getMovie(movie)
 
 
             withContext(Dispatchers.Main) {
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.container, DetailFragment.newInstance(recipe = recipe))
+                    .replace(R.id.container, DetailsFragment.newInstance(moviecast = movie))
                     .addToBackStack("my_fragment")
                     .commit();
             }
         }
     }
 
-    private fun refreshAsync(instructions: List<Instructions>? = null)
+    private fun refreshAsync(movie: List<Movie>? = null)
     {
-        if(instructions == null) {
+        if(movie == null) {
             GlobalScope.launch {
-                val instructions = RecipeDB.get(requireContext().applicationContext).instructionsDao().getAll()
+                val movie = MovieDB.get(requireContext().applicationContext).movieDao().getAll()
 
                 withContext(Dispatchers.Main) {
-                    adapter.items = instructions.toMutableList()
+                    adapter.items = movie.toMutableList()
                     adapter.notifyDataSetChanged()
                 }
             }
         }
         else
         {
-            adapter.items = instructions.toMutableList()
+            adapter.items = movie.toMutableList()
             adapter.notifyDataSetChanged()
         }
     }

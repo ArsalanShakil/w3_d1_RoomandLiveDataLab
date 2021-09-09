@@ -51,6 +51,6 @@ interface MovieCastDao {
  fun getAll(): List<MovieCast>
 
  @Query("SELECT * FROM Movie WHERE Movie.movie_name = :movie_name")
- fun getRecipe(movie_name: String): MovieCast
+ fun getMovie(movie_name: String): MovieCast
 }
 

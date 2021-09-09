@@ -1,59 +1,161 @@
 package com.example.w3_d1_roomandlivedatalab
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.children
+import com.example.w3_d1_roomandlivedatalab.data.MovieCast
+import com.example.w3_d1_roomandlivedatalab.data.MovieDB
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class DetailsFragment(private val moviecast: MovieCast) : Fragment() {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [DetailsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class DetailsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    companion object {
+        fun newInstance(moviecast: MovieCast) = DetailsFragment(moviecast)
     }
+
+    lateinit var layout: ConstraintLayout
+    lateinit var movielist: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_details, container, false)
+    ): View {
+        showBackButton()
+        layout = inflater.inflate(R.layout.fragment_details, container, false) as ConstraintLayout
+        movielist = layout.findViewById<LinearLayout>(R.id.linearLayoutIngredientsList)!!
+
+        refreshManifest()
+
+        // Title
+        layout.findViewById<EditText>(R.id.editTextName).setText(moviecast.movie.movie_name)
+
+        // Description
+        layout.findViewById<EditText>(R.id.editTextYear)
+            .setText(moviecast.movie.release_date)
+
+        layout.findViewById<EditText>(R.id.editTextDirector)
+            .setText(moviecast.movie.director)
+
+        // FAB
+        layout.findViewById<FloatingActionButton>(R.id.fabAddIngredient).setOnClickListener {
+            addIngredient()
+        }
+
+        // Delete
+        layout.findViewById<ImageView>(R.id.btnDelete).setOnClickListener {
+            remove()
+        }
+
+        return layout
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DetailsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            DetailsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun showBackButton(show: Boolean = true) {
+        if (activity is AppCompatActivity) {
+            setHasOptionsMenu(show)
+            (activity as AppCompatActivity?)?.supportActionBar?.setDisplayHomeAsUpEnabled(show)
+        }
     }
+
+    private fun refreshManifest() {
+
+        moviecast.actor_name.forEach {
+            var view = layoutInflater.inflate(R.layout.actors_view, null)
+            val actor = view.findViewById<EditText>(R.id.editTextActor)
+            actor.setText(it.actor_name)
+            val role = view.findViewById<TextView>(R.id.editTextRole)
+            role.setText(it.role)
+            val remove = view.findViewById<ImageView>(R.id.btnRemove)
+            remove.setOnClickListener {
+                movielist.removeView(view)
+            }
+            movielist.addView(view)
+        }
+    }
+
+    private fun remove()
+    {
+        GlobalScope.launch {
+            val db = MovieDB.get(requireContext().applicationContext)
+            db.actorsDao().deleteActors(moviecast.movie.movie_name)
+            db.movieDao().deleteMovie(movie_name = moviecast.movie.movie_name)
+
+            withContext(Dispatchers.Main) {
+                showBackButton(false)
+                requireActivity().onBackPressed()
+            }
+        }
+    }
+
+    private fun addIngredient() {
+        var view = layoutInflater.inflate(R.layout.actors_view, null)
+        val remove = view.findViewById<ImageView>(R.id.btnRemove)
+        remove.setOnClickListener {
+            movielist.removeView(view)
+        }
+        movielist.addView(view)
+    }
+
+    private fun commitChangesAndPop() {
+        GlobalScope.launch {
+            val db = MovieDB.get(requireContext().applicationContext)
+            db.actorsDao().deleteActors(moviecast.movie.movie_name)
+
+            // Update instructions
+            db.instructionsDao().update(
+                Instructions(
+                    moviecast.instructions.iid,
+                    layout.findViewById<EditText>(R.id.editTextRecipe).text.toString(),
+                    layout.findViewById<EditText>(R.id.editTextMultilineInstructions).text.toString()
+                )
+            )
+
+            // Replace manifest
+
+            ingredientslist.children.forEach {
+                db.manifestDao().insert(
+                    Manifest(
+                        recipe_name = layout.findViewById<EditText>(R.id.editTextRecipe).text.toString(),
+                        ingredient = it.findViewById<EditText>(R.id.editTextIngredient).text.toString(),
+                        amount = it.findViewById<TextView>(R.id.editTextQuantity).text.toString()
+                    )
+                )
+            }
+
+            withContext(Dispatchers.Main) {
+                showBackButton(false)
+                requireActivity().onBackPressed()
+            }
+        }
+    }
+
+    // Actionbar back press
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        commitChangesAndPop()
+        return true
+    }
+
+    // Device back press
+    override fun onResume() {
+        super.onResume()
+        requireView().isFocusableInTouchMode = true
+        requireView().requestFocus()
+        requireView().setOnKeyListener { _, keyCode, event ->
+            if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                commitChangesAndPop()
+                true
+            } else false
+        }
+    }
+
 }
