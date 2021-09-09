@@ -2,11 +2,8 @@ package com.example.w3_d1_roomandlivedatalab
 
 import android.os.Bundle
 import android.view.*
+import android.widget.*
 import androidx.fragment.app.Fragment
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
@@ -14,7 +11,6 @@ import com.example.w3_d1_roomandlivedatalab.data.Actors
 import com.example.w3_d1_roomandlivedatalab.data.Movie
 import com.example.w3_d1_roomandlivedatalab.data.MovieCast
 import com.example.w3_d1_roomandlivedatalab.data.MovieDB
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -50,7 +46,7 @@ class DetailsFragment(private val moviecast: MovieCast) : Fragment() {
             .setText(moviecast.movie.director)
 
         // FAB
-        layout.findViewById<FloatingActionButton>(R.id.addActorBtn).setOnClickListener {
+        layout.findViewById<Button>(R.id.addActorBtn).setOnClickListener {
             addIngredient()
         }
 

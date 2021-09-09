@@ -6,16 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.w3_d1_roomandlivedatalab.data.Movie
 import com.example.w3_d1_roomandlivedatalab.data.MovieDB
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
 
 
 class MainFragment : Fragment() {
@@ -40,7 +39,7 @@ class MainFragment : Fragment() {
         recyclerView.adapter = adapter
         refreshAsync()
 
-        view.findViewById<FloatingActionButton>(R.id.addMovieBtn).setOnClickListener {
+        view.findViewById<Button>(R.id.addMovieBtn).setOnClickListener {
             add()
         }
 
