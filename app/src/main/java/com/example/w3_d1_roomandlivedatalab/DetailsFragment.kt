@@ -10,6 +10,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.children
+import com.example.w3_d1_roomandlivedatalab.data.Actors
+import com.example.w3_d1_roomandlivedatalab.data.Movie
 import com.example.w3_d1_roomandlivedatalab.data.MovieCast
 import com.example.w3_d1_roomandlivedatalab.data.MovieDB
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -112,22 +114,24 @@ class DetailsFragment(private val moviecast: MovieCast) : Fragment() {
             db.actorsDao().deleteActors(moviecast.movie.movie_name)
 
             // Update instructions
-            db.instructionsDao().update(
-                Instructions(
-                    moviecast.instructions.iid,
-                    layout.findViewById<EditText>(R.id.editTextRecipe).text.toString(),
-                    layout.findViewById<EditText>(R.id.editTextMultilineInstructions).text.toString()
+            db.movieDao().update(
+                Movie(
+                    moviecast.movie.iid,
+                    layout.findViewById<EditText>(R.id.editTextName).text.toString(),
+                    layout.findViewById<EditText>(R.id.editTextYear).text.toString(),
+                    layout.findViewById<EditText>(R.id.editTextDirector).text.toString()
+
                 )
             )
 
             // Replace manifest
 
-            ingredientslist.children.forEach {
-                db.manifestDao().insert(
-                    Manifest(
-                        recipe_name = layout.findViewById<EditText>(R.id.editTextRecipe).text.toString(),
-                        ingredient = it.findViewById<EditText>(R.id.editTextIngredient).text.toString(),
-                        amount = it.findViewById<TextView>(R.id.editTextQuantity).text.toString()
+            movielist.children.forEach {
+                db.actorsDao().insert(
+                    Actors(
+                        movie_name = layout.findViewById<EditText>(R.id.editTextName).text.toString(),
+                        actor_name = it.findViewById<EditText>(R.id.editTextActor).text.toString(),
+                        role = it.findViewById<TextView>(R.id.editTextRole).text.toString()
                     )
                 )
             }
