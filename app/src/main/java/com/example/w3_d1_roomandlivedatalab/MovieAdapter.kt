@@ -1,32 +1,41 @@
 package com.example.w3_d1_roomandlivedatalab
 
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.w3_d1_roomandlivedatalab.data.Movie
 
-class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-class MovieAdapter(var onClick: (String) -> (Unit) = { }, var items : MutableList<Movie> = mutableListOf()) : RecyclerView.Adapter<MovieViewHolder>()
+class MovieAdapter(var onClick: (String) -> (Unit) = { }, var items : MutableList<Movie> = mutableListOf()) : RecyclerView.Adapter<MovieAdapter.ViewHolder>()
 {
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): MovieViewHolder = MovieViewHolder(TextView(parent.context))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        // inflates the card_view_design view
+        // that is used to hold list item
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.card_view, parent, false)
+
+        return ViewHolder(view)
+    }
 
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(
-        holder: MovieViewHolder,
+        holder: ViewHolder,
         position: Int
     ) {
         Log.e("DBG","Called onBindViewHolder")
-        (holder.itemView as TextView).text = items[position].movie_name
-        holder.itemView.setOnClickListener {
+        holder.movieNameTxt.text = items[position].movie_name
+
+        holder.movieNameTxt.setOnClickListener {
             onClick(items[position].movie_name)
         }
+
+    }
+    class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
+        val movieNameTxt: TextView = itemView.findViewById(R.id.movieNameTxt)
     }
 }

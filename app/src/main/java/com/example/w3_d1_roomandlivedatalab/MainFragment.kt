@@ -40,7 +40,7 @@ class MainFragment : Fragment() {
         recyclerView.adapter = adapter
         refreshAsync()
 
-        view.findViewById<FloatingActionButton>(R.id.floatingActionButton).setOnClickListener {
+        view.findViewById<FloatingActionButton>(R.id.addMovieBtn).setOnClickListener {
             add()
         }
 
@@ -65,7 +65,7 @@ class MainFragment : Fragment() {
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.container, DetailsFragment.newInstance(moviecast = movie))
                     .addToBackStack("my_fragment")
-                    .commit();
+                    .commit()
             }
         }
     }

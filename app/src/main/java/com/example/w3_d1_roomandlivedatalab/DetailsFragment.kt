@@ -35,7 +35,7 @@ class DetailsFragment(private val moviecast: MovieCast) : Fragment() {
     ): View {
         showBackButton()
         layout = inflater.inflate(R.layout.fragment_details, container, false) as ConstraintLayout
-        movielist = layout.findViewById<LinearLayout>(R.id.linearLayoutIngredientsList)!!
+        movielist = layout.findViewById<LinearLayout>(R.id.linearLayoutMovieList)!!
 
         refreshManifest()
 
@@ -50,7 +50,7 @@ class DetailsFragment(private val moviecast: MovieCast) : Fragment() {
             .setText(moviecast.movie.director)
 
         // FAB
-        layout.findViewById<FloatingActionButton>(R.id.fabAddIngredient).setOnClickListener {
+        layout.findViewById<FloatingActionButton>(R.id.fabAddActor).setOnClickListener {
             addIngredient()
         }
 
@@ -113,7 +113,6 @@ class DetailsFragment(private val moviecast: MovieCast) : Fragment() {
             val db = MovieDB.get(requireContext().applicationContext)
             db.actorsDao().deleteActors(moviecast.movie.movie_name)
 
-            // Update instructions
             db.movieDao().update(
                 Movie(
                     moviecast.movie.iid,
@@ -124,7 +123,6 @@ class DetailsFragment(private val moviecast: MovieCast) : Fragment() {
                 )
             )
 
-            // Replace manifest
 
             movielist.children.forEach {
                 db.actorsDao().insert(

@@ -1,6 +1,5 @@
 package com.example.w3_d1_roomandlivedatalab.data
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
