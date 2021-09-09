@@ -45,7 +45,6 @@ class DetailsFragment(private val moviecast: MovieCast) : Fragment() {
         layout.findViewById<EditText>(R.id.editTextDirector)
             .setText(moviecast.movie.director)
 
-        // FAB
         layout.findViewById<Button>(R.id.addActorBtn).setOnClickListener {
             addIngredient()
         }

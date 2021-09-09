@@ -113,7 +113,7 @@
         android:clickable="true"
         android:contentDescription="delete"
         android:focusable="true"
-        android:foreground="@android:drawable/ic_delete"
+        android:foreground="@android:drawable/ic_input_delete"
         android:src="@android:drawable/ic_menu_close_clear_cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
