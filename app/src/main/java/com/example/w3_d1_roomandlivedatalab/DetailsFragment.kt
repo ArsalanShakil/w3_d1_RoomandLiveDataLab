@@ -50,7 +50,7 @@ class DetailsFragment(private val moviecast: MovieCast) : Fragment() {
             .setText(moviecast.movie.director)
 
         // FAB
-        layout.findViewById<FloatingActionButton>(R.id.fabAddActor).setOnClickListener {
+        layout.findViewById<FloatingActionButton>(R.id.addActorBtn).setOnClickListener {
             addIngredient()
         }
 
