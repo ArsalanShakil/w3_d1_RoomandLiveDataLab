@@ -33,7 +33,7 @@ class DetailsFragment(private val moviecast: MovieCast) : Fragment() {
         layout = inflater.inflate(R.layout.fragment_details, container, false) as ConstraintLayout
         movielist = layout.findViewById<LinearLayout>(R.id.linearLayoutMovieList)!!
 
-        refreshManifest()
+        refreshActor()
 
         // Title
         layout.findViewById<EditText>(R.id.editTextName).setText(moviecast.movie.movie_name)
@@ -46,7 +46,7 @@ class DetailsFragment(private val moviecast: MovieCast) : Fragment() {
             .setText(moviecast.movie.director)
 
         layout.findViewById<Button>(R.id.addActorBtn).setOnClickListener {
-            addIngredient()
+            addActor()
         }
 
         // Delete
@@ -64,7 +64,7 @@ class DetailsFragment(private val moviecast: MovieCast) : Fragment() {
         }
     }
 
-    private fun refreshManifest() {
+    private fun refreshActor() {
 
         moviecast.actor_name.forEach {
             var view = layoutInflater.inflate(R.layout.actors_view, null)
@@ -94,7 +94,7 @@ class DetailsFragment(private val moviecast: MovieCast) : Fragment() {
         }
     }
 
-    private fun addIngredient() {
+    private fun addActor() {
         var view = layoutInflater.inflate(R.layout.actors_view, null)
         val remove = view.findViewById<ImageView>(R.id.btnRemove)
         remove.setOnClickListener {

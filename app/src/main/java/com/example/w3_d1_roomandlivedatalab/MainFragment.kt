@@ -91,10 +91,9 @@ class MainFragment : Fragment() {
     private fun add() {
         GlobalScope.launch {
             val db = MovieDB.get(requireContext().applicationContext)
-            if(db.movieDao().getMovie("new movie") == null) {
                 db.movieDao().insert(
                     Movie(
-                        movie_name = "new movie",
+                        movie_name = "Add movie here",
                         release_date = "",
                         director = "",
 
@@ -103,7 +102,6 @@ class MainFragment : Fragment() {
 
 
                 refreshAsync()
-            }
         }
     }
 }
