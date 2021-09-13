@@ -35,10 +35,8 @@ class DetailsFragment(private val moviecast: MovieCast) : Fragment() {
 
         refreshActor()
 
-        // Title
         layout.findViewById<EditText>(R.id.editTextName).setText(moviecast.movie.movie_name)
 
-        // Description
         layout.findViewById<EditText>(R.id.editTextYear)
             .setText(moviecast.movie.release_date)
 
@@ -49,7 +47,6 @@ class DetailsFragment(private val moviecast: MovieCast) : Fragment() {
             addActor()
         }
 
-        // Delete
         layout.findViewById<ImageView>(R.id.btnDelete).setOnClickListener {
             remove()
         }
@@ -136,13 +133,11 @@ class DetailsFragment(private val moviecast: MovieCast) : Fragment() {
         }
     }
 
-    // Actionbar back press
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         commitChangesAndPop()
         return true
     }
 
-    // Device back press
     override fun onResume() {
         super.onResume()
         requireView().isFocusableInTouchMode = true

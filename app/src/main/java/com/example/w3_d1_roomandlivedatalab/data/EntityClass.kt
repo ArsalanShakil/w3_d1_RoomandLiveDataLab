@@ -15,13 +15,12 @@ data class Movie(
     override fun toString() = "($movie_name) $release_date $director"
 }
 
-// Has a Many to One relation with Recipe
 @Entity
 data class Actors(
     @PrimaryKey(autoGenerate = true)
     val mid : Int? = null,
     val movie_name: String,
-    val actor_name: String, // Ingredient name & quantity (1tbsp/1l/5g)
+    val actor_name: String,
     val role : String
 )
 
