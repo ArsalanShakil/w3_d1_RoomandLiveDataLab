@@ -1,6 +1,5 @@
 package com.example.w3_d1_roomandlivedatalab
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +24,6 @@ class MovieAdapter(var onClick: (String) -> (Unit) = { }, var items : MutableLis
         holder: ViewHolder,
         position: Int
     ) {
-        Log.e("DBG","Called onBindViewHolder")
         holder.movieNameTxt.text = items[position].movie_name
 
         holder.movieNameTxt.setOnClickListener {

@@ -1,7 +1,6 @@
 package com.example.w3_d1_roomandlivedatalab
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -54,7 +53,6 @@ class MainFragment : Fragment() {
 
     private fun showDetail(movie : String)
     {
-        Log.e("DBG","Showing ${movie}")
         GlobalScope.launch {
             val db = MovieDB.get(requireContext().applicationContext)
             val movie = db.moviecastDao().getMovie(movie)

@@ -28,8 +28,8 @@ interface ActorsDao {
  @Query("SELECT * FROM Actors")
  fun getAll(): List<Actors>
 
- @Query("SELECT * FROM Actors WHERE Actors.movie_name = :recipe_name")
- fun getActors(recipe_name: String): List<Actors>
+ @Query("SELECT * FROM Actors WHERE Actors.movie_name = :movie_name")
+ fun getActors(movie_name: String): List<Actors>
 
  @Insert(onConflict = OnConflictStrategy.REPLACE)
  fun insert(actors: Actors)
